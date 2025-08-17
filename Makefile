@@ -1,19 +1,8 @@
-COMPILER = g++
-FLAGS = -Wall -g -std=c++23
+CCOMPILER = gcc
+CXXCOMPILER = g++
+FLAGS = -Wall
+EXPORTFOLDER = export
 
-TARGET = main
-SRC_DIR = src
-
-SOURCES := $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS := $(patsubst $(SRC_DIR)/%.cpp,obj/%.o,$(SOURCES))
-
-$(TARGET): $(OBJECTS)
-	$(COMPILER) -o $@ $^
-
-obj/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(@D) # Create the object directory if it doesn't exist
-	$(COMPILER) $(FLAGS) -c -o $@ $<
-
-clean:
-	rm -f obj/*.o $(TARGET)
-	rmdir obj 2>/dev/null || true # Remove the object directory if empty
+main:
+	cmake -DCMAKE_C_COMPILER=$(CCOMPILER) -DCMAKE_CXX_COMPILER=$(CXXCOMPILER) -B $(EXPORTFOLDER) -G Ninja $(FLAGS)
+	ninja -C $(EXPORTFOLDER)
